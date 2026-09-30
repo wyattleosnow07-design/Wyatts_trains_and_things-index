@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wyatt's Trains & Things</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f6f8;color:#17202a}
+header{background:#102a43;color:white;padding:16px 5%;position:sticky;top:0;z-index:20}
+.nav{max-width:1200px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.logo{font-size:1.35rem;font-weight:800}
+nav a{color:white;text-decoration:none;margin:0 8px;font-weight:700}
+nav a:hover{color:#ffd166}
+.cart-btn{background:#ffd166;color:#102a43;border:0;border-radius:8px;padding:10px 14px;font-weight:800;cursor:pointer}
+.hero{background:linear-gradient(135deg,#102a43,#1f5f8b);color:white;padding:75px 5%;text-align:center}
+.hero h1{font-size:clamp(2.2rem,6vw,4rem);margin:0 0 12px}
+.hero p{font-size:1.15rem;max-width:700px;margin:0 auto 25px}
+.btn{display:inline-block;border:0;border-radius:8px;padding:12px 18px;background:#ffd166;color:#102a43;font-weight:800;text-decoration:none;cursor:pointer}
+.container{max-width:1200px;margin:auto;padding:55px 5%}
+h2{text-align:center;font-size:2rem;margin-top:0}
+.services{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.card{background:white;padding:25px;border-radius:14px;box-shadow:0 5px 18px #00000012}
+.card h3{margin-top:0;color:#102a43}
+.shop-tools{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:25px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #ccd6df;border-radius:7px;font:inherit}
+.shop-tools input{flex:1;min-width:220px}
+.shop-tools select{width:220px}
+.products{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.product{background:white;border-radius:14px;padding:20px;box-shadow:0 5px 18px #00000012}
+.product .image{height:150px;border-radius:10px;background:#e8eef3;display:flex;align-items:center;justify-content:center;font-size:3rem;margin-bottom:15px}
+.price{font-size:1.25rem;font-weight:800;color:#1f5f8b}
+.product button{width:100%;margin-top:12px}
+.form-section{background:#fff;border-radius:14px;padding:28px;box-shadow:0 5px 18px #00000012;margin-bottom:30px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.full{grid-column:1/-1}
+label{display:block;font-weight:700;margin-bottom:6px}
+.submit{background:#102a43;color:white;border:0;border-radius:8px;padding:13px 18px;font-weight:800;cursor:pointer}
+.submit:hover{background:#1f5f8b}
+.confirm{display:none;margin-top:18px;padding:15px;border-radius:8px;background:#e7f6ea;color:#176b2c;font-weight:700}
+.error{display:none;margin-top:18px;padding:15px;border-radius:8px;background:#fdeaea;color:#9b2226;font-weight:700}
+.contact{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+footer{background:#102a43;color:white;text-align:center;padding:25px}
+.modal{display:none;position:fixed;inset:0;background:#0008;z-index:50;padding:30px}
+.modal-box{background:white;max-width:600px;margin:5vh auto;padding:25px;border-radius:14px;max-height:85vh;overflow:auto}
+.close{float:right;background:none;border:0;font-size:1.5rem;cursor:pointer}
+.cart-item{display:flex;justify-content:space-between;border-bottom:1px solid #ddd;padding:12px 0;gap:15px}
+.empty{text-align:center;color:#667}
+@media(max-width:800px){
+.services,.products,.contact{grid-template-columns:1fr}
+.form-grid{grid-template-columns:1fr}
+.full{grid-column:auto}
+nav{width:100%;text-align:center}
+}
+</style>
+
+</head>
+<body>
+
+<header>
+<div class="nav">
+<div class="logo">🚂 Wyatt's Trains & Things</div>
+<nav>
+<a href="#shop">Shop</a>
+<a href="#orders">Online Orders</a>
+<a href="#sell">Sell</a>
+<a href="#trade">Trade-In</a>
+<a href="#contact">Contact</a>
+</nav>
+<button class="cart-btn" onclick="openCart()">Cart (<span id="cartCount">0</span>)</button>
+</div>
+</header>
+
+<section class="hero">
+<h1>Wyatt's Trains & Things</h1>
+<p>Model trains, railway equipment, buying, selling, trade-ins and online orders.</p>
+<a class="btn" href="#shop">Shop Model Trains</a>
+</section>
+
+<section class="container">
+<h2>What We Do</h2>
+<div class="services">
+<div class="card"><h3>🛒 Shop & Order</h3><p>Browse available model railway items and add them to your online order.</p><a class="btn" href="#shop">Shop Now</a></div>
+<div class="card"><h3>💰 Sell Your Trains</h3><p>Send us information about model trains or railway items you would like to sell.</p><a class="btn" href="#sell">Sell Your Trains</a></div>
+<div class="card"><h3>🔄 Trade-In</h3><p>Tell us about your items and what you would like to receive in a trade.</p><a class="btn" href="#trade">Start a Trade-In</a></div>
+</div>
+</section>
+
+<section id="shop" class="container">
+<h2>Shop</h2>
+<div class="shop-tools">
+<input id="search" type="search" placeholder="Search model trains..." oninput="renderProducts()">
+<select id="category" onchange="renderProducts()">
+<option value="all">All Categories</option>
+<option value="locomotive">Locomotives</option>
+<option value="rolling">Rolling Stock</option>
+<option value="track">Track</option>
+</select>
+</div>
+<div id="products" class="products"></div>
+</section>
+
+<section id="orders" class="container">
+<h2>Online Orders</h2>
+<div class="form-section">
+<p>Add products to your cart, then use the button below to submit an order request. Your request is saved in this browser and a confirmation appears immediately.</p>
+<button class="submit" type="button" onclick="submitOrder()">Submit Online Order</button>
+<div id="orderConfirm" class="confirm"></div><div id="orderError" class="error"></div>
+</div>
+</section>
+
+<section class="container">
+<div class="card">
+<h3>📨 Form submissions</h3>
+<p>Sell and trade-in requests are sent through our secure Formspree form service to the store email.</p>
+</div>
+</section>
+
+<section id="sell" class="container">
+<h2>Sell Your Trains</h2>
+<div class="form-section">
+<form id="sellForm" action="https://formspree.io/f/xyezonjq" method="POST">
+<input type="hidden" name="form_type" value="Sell Request">
+<input type="hidden" name="_subject" value="Wyatt's Trains & Things — Sell Request">
+<div class="form-grid">
+<div><label>Name *</label><input name="name" required></div>
+<div><label>Email *</label><input name="email" type="email" required></div>
+<div><label>Item Type *</label><input name="type" placeholder="Locomotive, cars, track..." required></div>
+<div><label>Scale</label><input name="scale" placeholder="HO, N, O, OO..."></div>
+<div><label>Brand</label><input name="brand"></div>
+<div><label>Quantity</label><input name="quantity" type="number" min="1"></div>
+<div><label>Condition *</label><select name="condition" required><option value="">Select</option><option>New</option><option>Excellent</option><option>Good</option><option>Fair</option><option>Needs repair</option></select></div>
+<div><label>Asking Price (CAD)</label><input name="price" type="number" min="0" step="0.01"></div>
+<div class="full"><label>Description *</label><textarea name="description" rows="5" required></textarea></div>
+<div class="full"><label>Photo Links (optional)</label><input name="photo_links" type="url" placeholder="Paste a Google Photos, Dropbox, or other share link"></div>
+<div class="full"><button class="submit" type="submit" data-fs-submit-btn>Submit Sell Request</button></div>
+</div>
+<div id="sellConfirm" class="confirm"></div>
+<div id="sellError" class="error"></div>
+</form>
+</div>
+</section>
+
+<section id="trade" class="container">
+<h2>Trade-In</h2>
+<div class="form-section">
+<form id="tradeForm" action="https://formspree.io/f/xyezonjq" method="POST">
+<input type="hidden" name="form_type" value="Trade-In Request">
+<input type="hidden" name="_subject" value="Wyatt's Trains & Things — Trade-In Request">
+<div class="form-grid">
+<div><label>Name *</label><input name="name" required></div>
+<div><label>Email *</label><input name="email" type="email" required></div>
+<div><label>Item *</label><input name="item" required></div>
+<div><label>Scale</label><input name="scale"></div>
+<div><label>Brand</label><input name="brand"></div>
+<div><label>Quantity</label><input name="quantity" type="number" min="1"></div>
+<div><label>Condition *</label><select name="condition" required><option value="">Select</option><option>New</option><option>Excellent</option><option>Good</option><option>Fair</option><option>Needs repair</option></select></div>
+<div><label>What would you like in exchange?</label><input name="wanted"></div>
+<div class="full"><label>Description *</label><textarea name="description" rows="5" required></textarea></div>
+<div class="full"><label>Photo Links (optional)</label><input name="photo_links" type="url" placeholder="Paste a Google Photos, Dropbox, or other share link"></div>
+<div class="full"><button class="submit" type="submit" data-fs-submit-btn>Submit Trade-In Request</button></div>
+</div>
+<div id="tradeConfirm" class="confirm"></div>
+<div id="tradeError" class="error"></div>
+</form>
+</div>
+</section>
+
+<section id="contact" class="container">
+<h2>Contact Us</h2>
+<div class="contact">
+<div class="card"><h3>📧 Email</h3><p><a href="mailto:Wyattleosnow07@gmail.com">Wyattleosnow07@gmail.com</a></p></div>
+<div class="card"><h3>📍 Location</h3><p>Winnipeg, Manitoba, Canada</p></div>
+<div class="card"><h3>🕒 Store Hours</h3><p>Hours to be finalized.</p></div>
+</div>
+</section>
+
+<footer>
+<p>© 2026 Wyatt's Trains & Things</p>
+<p>Model trains • Buy • Sell • Trade-In • Online Orders</p>
+</footer>
+
+<div id="cartModal" class="modal" onclick="closeCart(event)">
+<div class="modal-box" onclick="event.stopPropagation()">
+<button class="close" onclick="closeCart()">×</button>
+<h2>Your Cart</h2>
+<div id="cartItems"></div>
+<div id="cartTotal"></div>
+<button class="submit" type="button" onclick="submitOrder()">Submit Online Order</button>
+</div>
+</div>
+
+<script>
+const products=[
+{id:1,name:"Diesel Road Switcher",category:"locomotive",scale:"HO",condition:"Tested",price:149.99,icon:"🚂"},
+{id:2,name:"Covered Hopper",category:"rolling",scale:"HO",condition:"Good condition",price:29.99,icon:"🚃"},
+{id:3,name:"Model Railway Track",category:"track",scale:"HO",condition:"New",price:4.99,icon:"🛤️"},
+{id:4,name:"Freight Boxcar",category:"rolling",scale:"HO",condition:"Good",price:24.99,icon:"🚃"},
+{id:5,name:"Diesel Locomotive",category:"locomotive",scale:"N",condition:"Excellent",price:119.99,icon:"🚂"},
+{id:6,name:"Straight Track Section",category:"track",scale:"N",condition:"New",price:3.99,icon:"🛤️"}
+];
+
+let cart=JSON.parse(localStorage.getItem("wyattsCart")||"[]");
+
+function renderProducts(){
+ const q=document.getElementById("search").value.toLowerCase();
+ const c=document.getElementById("category").value;
+ const list=products.filter(p=>(c==="all"||p.category===c)&&p.name.toLowerCase().includes(q));
+ document.getElementById("products").innerHTML=list.map(p=>`
+ <div class="product">
+  <div class="image">${p.icon}</div>
+  <h3>${p.name}</h3>
+  <p>${p.scale} • ${p.condition}</p>
+  <p class="price">$${p.price.toFixed(2)} CAD</p>
+  <button class="submit" onclick="addToCart(${p.id})">Add to Cart</button>
+ </div>`).join("")||"<p class='empty'>No products found.</p>";
+}
+function addToCart(id){
+ const p=products.find(x=>x.id===id);
+ cart.push(p);
+ saveCart();
+ alert(p.name+" was added to your cart.");
+}
+function saveCart(){
+ localStorage.setItem("wyattsCart",JSON.stringify(cart));
+ document.getElementById("cartCount").textContent=cart.length;
+}
+function openCart(){
+ renderCart();
+ document.getElementById("cartModal").style.display="block";
+}
+function closeCart(e){
+ if(!e||e.target.id==="cartModal") document.getElementById("cartModal").style.display="none";
+}
+function renderCart(){
+ const box=document.getElementById("cartItems");
+ if(!cart.length){box.innerHTML="<p class='empty'>Your cart is empty.</p>";document.getElementById("cartTotal").innerHTML="";return;}
+ box.innerHTML=cart.map((p,i)=>`<div class="cart-item"><span>${p.name} — $${p.price.toFixed(2)}</span><button onclick="removeItem(${i})">Remove</button></div>`).join("");
+ const total=cart.reduce((s,p)=>s+p.price,0);
+ document.getElementById("cartTotal").innerHTML="<h3>Total: $"+total.toFixed(2)+" CAD</h3>";
+}
+function removeItem(i){
+ cart.splice(i,1);
+ saveCart();
+ renderCart();
+}
+
+async function submitOrder(){
+ const success=document.getElementById("orderConfirm");
+ const error=document.getElementById("orderError");
+ if(!cart.length){
+  error.className="error";
+  error.style.display="block";
+  error.textContent="Please add at least one item to your cart before submitting an order.";
+  return;
+ }
+ const total=cart.reduce((s,p)=>s+p.price,0);
+ const data=new FormData();
+ data.append("form_type","Online Order");
+ data.append("order_items",cart.map(p=>p.name+" — $"+p.price.toFixed(2)+" CAD").join("\n"));
+ data.append("order_total","$"+total.toFixed(2)+" CAD");
+ data.append("_subject","Wyatt's Trains & Things — Online Order");
+
+ try{
+  const response=await fetch("https://formspree.io/f/xyezonjq",{
+   method:"POST",
+   body:data,
+   headers:{"Accept":"application/json"}
+  });
+  if(!response.ok) throw new Error("Order submission failed.");
+  success.className="confirm";
+  success.style.display="block";
+  error.style.display="none";
+  success.textContent="Order submitted successfully! Wyatt's Trains & Things has received your order request.";
+  cart=[];
+  saveCart();
+  renderCart();
+ }catch(e){
+  error.className="error";
+  error.style.display="block";
+  error.textContent="The order could not be submitted. Please try again.";
+ }
+}
+
+renderProducts();
+saveCart();
+</script>
+</body>
+</html>
